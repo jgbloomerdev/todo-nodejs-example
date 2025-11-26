@@ -1,5 +1,5 @@
 {
-  "name": "docker-nodejs",
+  "name": "todo-nodejs-example",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
