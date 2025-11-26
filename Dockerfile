@@ -8,7 +8,7 @@
 
 ARG NODE_VERSION=18.0.0
 
-FROM node:${NODE_VERSION}-alpine as base
+FROM node:${NODE_VERSION}-alpine AS base
 WORKDIR /usr/src/app
 EXPOSE 3000
 
@@ -19,7 +19,7 @@ EXPOSE 3000
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
 # Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
 # into this layer.
-FROM base as dev
+FROM base AS dev
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
@@ -28,7 +28,7 @@ USER node
 COPY . .
 CMD npm run dev
 
-FROM base as prod
+FROM base AS prod
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
@@ -37,8 +37,8 @@ USER node
 COPY . .
 CMD node src/index.js
 
-FROM base as test
-ENV NODE_ENV test
+FROM base AS test
+# ENV NODE_ENV test
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
